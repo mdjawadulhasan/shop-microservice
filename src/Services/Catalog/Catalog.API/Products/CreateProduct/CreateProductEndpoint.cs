@@ -1,6 +1,7 @@
-﻿namespace Catalog.API.Products
+﻿namespace Catalog.API.Products.CreateProduct
 {
     public class CreateProductEndpoint
     {
+
     }
 }
