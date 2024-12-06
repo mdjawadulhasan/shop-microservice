@@ -1,13 +1,22 @@
-﻿
-namespace Catalog.API.Products.GetProduct;
+﻿namespace Catalog.API.Products.GetProduct;
+public record GetProductResponse(List<Product> products);
 
-public record GetProductResponse(string name, List<string> Categories, string Description, string ImagePath, decimal Price);
+public class GetProductEndpoint : ICarterModule
+{
+    public void AddRoutes(IEndpointRouteBuilder app)
+    {
+        app.MapGet("/products", async (ISender sender) =>
+            {
+                var result = await sender.Send(new GetProductsQuery());
 
+                var response = result.Adapt<GetProductResponse>();
 
-//public class GetProductEndpoint : ICarterModule
-//{
-//    public void AddRoutes(IEndpointRouteBuilder app)
-//    {
-//        throw new NotImplementedException();
-//    }
-//}
+                return Results.Ok(response);
+
+            }).WithName("GetProducts")
+         .Produces<GetProductResponse>(StatusCodes.Status200OK)
+         .ProducesProblem(StatusCodes.Status400BadRequest)
+         .WithSummary("Get Products")
+         .WithDescription("Get Products");
+    }
+}

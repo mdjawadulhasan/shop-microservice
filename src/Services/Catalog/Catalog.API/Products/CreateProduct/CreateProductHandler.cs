@@ -11,8 +11,6 @@ internal class CreateProductHandler (IDocumentSession session)
 {
     public async Task<CreateProductResult> Handle(CreateProductCommand command, CancellationToken cancellationToken)
     {
-       
-
         var product = new Product
         {
             Name = command.Name,
