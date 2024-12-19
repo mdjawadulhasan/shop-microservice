@@ -9,7 +9,6 @@ public class GetProductsByIdQueryHandler
 {
     public async Task<GetProductByIdResult> Handle(GetProductsByIdQuery query, CancellationToken cancellationToken)
     {
-        logger.LogInformation("GetProductsByIdQueryHandler.Handle called with {@Query}", query);
 
         var product = await session.Query<Product>().FirstOrDefaultAsync(x => x.Id == query.Id);
 

@@ -11,8 +11,6 @@ internal class GetProductQueryHandler
 {
     public async Task<GetProductResult> Handle(GetProductsQuery query, CancellationToken cancellationToken)
     {
-        logger.LogInformation("GetProductQueryHandler.Handle called with {Q}", query);
-
         var prodcuts = await session.Query<Product>().ToListAsync(cancellationToken);
 
         return new GetProductResult(prodcuts);

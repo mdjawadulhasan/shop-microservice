@@ -10,10 +10,6 @@ public class GetProductEndpoint : ICarterModule
                 var result = await sender.Send(new GetProductsQuery());
 
                 var response = result.Adapt<GetProductResponse>();
-                var a = 10;
-                var b = 0;
-
-                a = a / b;
 
                 return Results.Ok(response);
 
