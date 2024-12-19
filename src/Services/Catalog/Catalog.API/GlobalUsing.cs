@@ -6,6 +6,6 @@ global using MediatR;
 global using Marten;
 global using Catalog.API.Exceptions;
 global using FluentValidation;
-
+global using BuildingBlocks.Behaviours;
 
 

@@ -11,11 +11,11 @@ public class CreateProductCommandValidator : AbstractValidator<CreateProductComm
 {
     public CreateProductCommandValidator()
     {
-        RuleFor(x => x.Name).NotEmpty().WithName("Name is Required");
-        RuleFor(x => x.Categories).NotEmpty().WithName("Category is required");
-        RuleFor(x => x.Description).NotEmpty().WithName("Description is required");
-        RuleFor(x => x.ImagePath).NotEmpty().WithName("ImagePath is required");
-        RuleFor(x => x.Price).NotEmpty().WithName("Price is required");
+        RuleFor(x => x.Name).NotEmpty().WithMessage("Name is Required");
+        RuleFor(x => x.Categories).NotEmpty().WithMessage("Category is required");
+        RuleFor(x => x.Description).NotEmpty().WithMessage("Description is required");
+        RuleFor(x => x.ImagePath).NotEmpty().WithMessage("ImagePath is required");
+        RuleFor(x => x.Price).NotEmpty().WithMessage("Price is required");
     }
 }
 
@@ -24,8 +24,6 @@ internal class CreateProductHandler(IDocumentSession session)
 {
     public async Task<CreateProductResult> Handle(CreateProductCommand command, CancellationToken cancellationToken)
     {
-      
-
         var product = new Product
         {
             Name = command.Name,

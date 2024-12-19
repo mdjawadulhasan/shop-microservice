@@ -12,7 +12,7 @@ public class DeleteProductHandler
 
         var product = await session.Query<Product>().FirstOrDefaultAsync(x => x.Id == command.Id);
 
-        if (product == null) throw new ProductNotFoundException(command.Id);
+        if (product == null) throw new  ProductNotFoundException(command.Id);
 
         session.Delete(product);
         await session.SaveChangesAsync();
