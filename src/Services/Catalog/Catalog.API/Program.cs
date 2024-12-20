@@ -1,6 +1,7 @@
 
 
 using BuildingBlocks.Exceptions.Handler;
+using Catalog.API.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,12 +21,18 @@ builder.Services.AddMarten(opt =>
 
 }).UseLightweightSessions();
 
+
+if (builder.Environment.IsDevelopment())
+    builder.Services.InitializeMartenWith<CatalogInitialData>();
+
+
 builder.Services.ConfigureHttpJsonOptions(options =>
 {
     options.SerializerOptions.PropertyNamingPolicy = null;
 });
 
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
+
 
 var app = builder.Build();
 
