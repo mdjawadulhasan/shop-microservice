@@ -1,8 +1,3 @@
-
-
-using BuildingBlocks.Exceptions.Handler;
-using Catalog.API.Data;
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCarter();
@@ -33,10 +28,18 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 
+builder.Services.AddHealthChecks()
+    .AddNpgSql(builder.Configuration.GetConnectionString("Database")!);
 
 var app = builder.Build();
 
 app.MapCarter();
+
+app.UseHealthChecks("/health",
+    new HealthCheckOptions
+    {
+        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+    });
 
 app.UseExceptionHandler(options => { });
 
