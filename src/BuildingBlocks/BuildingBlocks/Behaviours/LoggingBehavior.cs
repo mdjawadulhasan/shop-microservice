@@ -17,6 +17,8 @@ public class LoggingBehavior<TRequest, TResponse>(ILogger<LoggingBehavior<TReque
 
         var response = await next();
 
+        
+
         timer.Stop();
         var timeTaken = timer.Elapsed;
         if (timeTaken.Seconds > 3) // if the request is greater than 3 seconds, then log the warnings
