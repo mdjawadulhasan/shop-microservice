@@ -1,5 +1,3 @@
-namespace Basket.API;
-
 public class Program
 {
     public static void Main(string[] args)
@@ -39,12 +37,26 @@ public class Program
             options.Configuration = builder.Configuration.GetConnectionString("Redis")!;
         });
 
+        builder.Services.AddHealthChecks();
+
+        builder.Services.AddHealthChecks()
+            .AddRedis(builder.Configuration.GetConnectionString("Redis")!)
+            .AddNpgSql(builder.Configuration.GetConnectionString("Database")!);
+
+
         var app = builder.Build();
+
 
         app.UseExceptionHandler(options => { });
         app.UseStatusCodePages();
 
         app.MapCarter();
+
+        app.UseHealthChecks("/health",
+            new HealthCheckOptions
+            {
+                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+            });
 
         app.Run();
     }
