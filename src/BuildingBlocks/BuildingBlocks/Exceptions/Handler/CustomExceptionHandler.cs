@@ -16,7 +16,7 @@ public class CustomExceptionHandler
             "Error Message: {exceptionMessage}, Time of occurrence {time}",
             exception.Message, DateTime.UtcNow);
 
-        (string Detail, string Title, int StatusCode) details = exception switch
+        (string Message, string Name, int StatusCode) details = exception switch
         {
             InternalServerException =>
             (
@@ -52,8 +52,8 @@ public class CustomExceptionHandler
 
         var problemDetails = new ProblemDetails
         {
-            Title = details.Title,
-            Detail = details.Detail,
+            Title = details.Message,
+            Detail = details.Name,
             Status = details.StatusCode,
             Instance = context.Request.Path
         };
