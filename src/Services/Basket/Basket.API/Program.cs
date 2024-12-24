@@ -9,7 +9,7 @@ public class Program
         builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 
         builder.Services.AddCarter();
-      
+
         builder.Services.AddMediatR(cfg =>
         {
             cfg.RegisterServicesFromAssembly(typeof(Program).Assembly);
@@ -25,6 +25,19 @@ public class Program
         }).UseLightweightSessions();
 
         builder.Services.AddScoped<IBasketRepository, BasketRepository>();
+        builder.Services.Decorate<IBasketRepository, CachedBasketRepository>();
+
+        //builder.Services.AddScoped<IBasketRepository>(provider =>
+        //{
+        //    var basketRepository = provider.GetRequiredService<BasketRepository>();
+        //    var cache = provider.GetRequiredService<IDistributedCache>();
+        //    return new CachedBasketRepository(basketRepository, cache);
+        //});
+
+        builder.Services.AddStackExchangeRedisCache(options =>
+        {
+            options.Configuration = builder.Configuration.GetConnectionString("Redis")!;
+        });
 
         var app = builder.Build();
 
