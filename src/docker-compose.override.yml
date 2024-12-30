@@ -1,6 +1,8 @@
 version: '3.4'
 
 services:
+
+# infrastructure
   catalogdb:
     container_name: catalogdb
     environment:
@@ -12,6 +14,8 @@ services:
       - "5433:5432"
     volumes:
       - postgres_catalog:/var/lib/postgresql/data
+
+
 
   basketdb:
     container_name: basketdb
@@ -25,12 +29,16 @@ services:
     volumes:
       - postgres_basketdb:/var/lib/postgresql/data
 
+
+
   distributedcache:
     container_name: distributedcache
     restart: always
     ports:
       - "6378:6379"
   
+
+
   seq:
     image: datalust/seq:latest
     container_name: seq
@@ -41,6 +49,9 @@ services:
     volumes:
       - seq_data:/data
 
+
+
+# Services
   catalog.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
@@ -50,14 +61,16 @@ services:
     depends_on:
       - catalogdb
       - seq
-
     ports:
       - "6000:8080"
       - "6060:8081"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+     
       
+
+
   basket.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
@@ -65,6 +78,11 @@ services:
       - ASPNETCORE_HTTPS_PORTS=8081
       - ConnectionStrings__Database=Server=BasketDb;Port=5432;Database=BasketDb;User Id=postgres;Password=postgres;Include Error Detail=true
       - ConnectionStrings__Redis=distributedcache:6379
+      - GrpcSettings__DiscountUrl=https://discount.grpc:8081
+    depends_on:
+      - basketdb
+      - distributedcache
+      - discount.grpc
     ports:
       - "6001:8080"
       - "6061:8081"
@@ -85,6 +103,9 @@ services:
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+
+
+
 volumes:
   postgres_catalog:
   seq_data:
