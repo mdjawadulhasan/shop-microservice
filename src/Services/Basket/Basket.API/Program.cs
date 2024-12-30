@@ -1,10 +1,10 @@
+using Discount.Grpc;
+
 public class Program
 {
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-
-        builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 
         builder.Services.AddCarter();
 
@@ -14,6 +14,8 @@ public class Program
             cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
             cfg.AddOpenBehavior(typeof(LoggingBehavior<,>));
         });
+
+
 
         builder.Services.AddMarten(opt =>
         {
@@ -37,6 +39,24 @@ public class Program
             options.Configuration = builder.Configuration.GetConnectionString("Redis")!;
         });
 
+
+        builder.Services.AddGrpcClient<DiscountProtoService.DiscountProtoServiceClient>(o =>
+        {
+            o.Address = new Uri(builder.Configuration["GrpcSettings:DiscountUrl"]);
+
+        }).ConfigurePrimaryHttpMessageHandler(() =>
+        {
+            var handler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+            };
+
+            return handler;
+        });
+
+
+        builder.Services.AddExceptionHandler<CustomExceptionHandler>();
+
         builder.Services.AddHealthChecks();
 
         builder.Services.AddHealthChecks()
@@ -45,7 +65,6 @@ public class Program
 
 
         var app = builder.Build();
-
 
         app.UseExceptionHandler(options => { });
         app.UseStatusCodePages();

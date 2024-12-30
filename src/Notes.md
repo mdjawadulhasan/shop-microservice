@@ -9,4 +9,5 @@ docker-compose up -d
 
 docker ps
 docker-compose down
+ocker-compose down -v   #: Deletes containers, networks, AND all volumes 
 docker-compose up -d catalogdb
