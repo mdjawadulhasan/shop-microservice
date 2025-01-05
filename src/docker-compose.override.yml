@@ -29,7 +29,16 @@ services:
     volumes:
       - postgres_basketdb:/var/lib/postgresql/data
 
-
+  orderdb:
+    container_name: orderdb
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Password123
+    restart: always
+    ports:
+      - "1434:1433"
+    volumes:
+      - orderdb:/var/opt/mssql
 
   distributedcache:
     container_name: distributedcache
@@ -37,7 +46,6 @@ services:
     ports:
       - "6378:6379"
   
-
 
   seq:
     image: datalust/seq:latest
@@ -68,9 +76,7 @@ services:
       - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
      
-      
-
-
+           
   basket.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
@@ -109,5 +115,6 @@ services:
 volumes:
   postgres_catalog:
   seq_data:
-  postgres_basketdb:  
+  postgres_basketdb: 
+  orderdb:
 
