@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Ordering.Domain.Abstraction;
@@ -15,6 +15,7 @@ namespace Ordering.Infrastructure.Data.Interceptors
 
         public override ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData, InterceptionResult<int> result, CancellationToken cancellationToken = default)
         {
+            DispatchDomainEvents(eventData.Context).GetAwaiter().GetResult();
             return base.SavingChangesAsync(eventData, result, cancellationToken);
         }
 
