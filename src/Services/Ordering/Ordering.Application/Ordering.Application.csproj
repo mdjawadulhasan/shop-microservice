@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\BuildingBlocks\BuildingBlocks.Messaging\BuildingBlocks.Messaging.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\BuildingBlocks\BuildingBlocks.csproj" />
     <ProjectReference Include="..\Ordering.Domain\Ordering.Domain.csproj" />
   </ItemGroup>
@@ -17,7 +18,6 @@
     <Folder Include="Orders\Commands\DeleteOrder\" />
     <Folder Include="Orders\Commands\UpdateOrder\" />
     <Folder Include="Orders\EventHandlers\Domain\" />
-    <Folder Include="Orders\EventHandlers\Integration\" />
     <Folder Include="Orders\Queries\GetOrderByName\" />
   </ItemGroup>
 
