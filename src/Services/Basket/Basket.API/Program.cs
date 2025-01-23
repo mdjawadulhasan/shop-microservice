@@ -1,3 +1,4 @@
+using BuildingBlocks.Messaging.MassTransit;
 using Discount.Grpc;
 
 public class Program
@@ -54,6 +55,7 @@ public class Program
             return handler;
         });
 
+        builder.Services.AddMessageBroker(builder.Configuration);
 
         builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 
